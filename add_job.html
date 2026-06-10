@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Job</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand text-warning fw-bold" href="/" data-i18n="appName">AI Job Finder</a>
+        <div class="d-flex gap-2">
+            <button type="button" onclick="setLanguage('en')" class="btn btn-outline-light" data-lang-button="en" data-i18n="english">English</button>
+            <button type="button" onclick="setLanguage('te')" class="btn btn-outline-light" data-lang-button="te" data-i18n="telugu">Telugu</button>
+            <button type="button" onclick="setLanguage('hi')" class="btn btn-outline-light" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+            <a href="/dashboard" class="btn btn-outline-light" data-i18n="dashboard">Dashboard</a>
+            <a href="/all_jobs" class="btn btn-outline-light" data-i18n="allJobs">All Jobs</a>
+            <a href="/logout" class="btn btn-danger" data-i18n="logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container d-flex justify-content-center align-items-center py-5" style="min-height: 90vh;">
+    <section class="card shadow p-4" style="width: min(100%, 430px); border-radius: 12px;">
+        <h1 class="h3 text-center mb-4" data-i18n="addJob">Add Job</h1>
+
+        <form method="post">
+            <input name="title" class="form-control mb-3" placeholder="Job Title" data-i18n-placeholder="titlePlaceholder" required>
+            <input name="skills" class="form-control mb-3" placeholder="Required Skills" data-i18n-placeholder="requiredSkillsPlaceholder" required>
+            <input name="location" class="form-control mb-3" placeholder="Location" data-i18n-placeholder="locationAddPlaceholder" required>
+            <input name="mobile" type="tel" class="form-control mb-3" placeholder="Mobile Number" data-i18n-placeholder="mobilePlaceholder" required>
+            <button type="submit" class="btn btn-success w-100" data-i18n="addJob">Add Job</button>
+            <button type="button" onclick="startVoice()" class="btn btn-dark w-100 mt-2" data-i18n="speak">Speak</button>
+        </form>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>

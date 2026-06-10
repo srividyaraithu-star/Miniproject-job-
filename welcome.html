@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Job Portal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
+            url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            width: min(90vw, 390px);
+            box-shadow: 0 0 20px rgba(0,0,0,0.45);
+        }
+
+        .btn, .top-btn {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            background-color: #ff7f50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn {
+            margin: 5px;
+        }
+
+        .btn:hover, .top-btn:hover {
+            background-color: #ff4500;
+        }
+
+        .btn.active {
+            background: #198754;
+        }
+
+        .start {
+            background: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="top-nav">
+    <button onclick="location.href='/login'" class="top-btn" data-i18n="login">Login</button>
+    <button onclick="location.href='/register'" class="top-btn" data-i18n="register">Register</button>
+    <button onclick="location.href='/dashboard'" class="top-btn" data-i18n="dashboard">Dashboard</button>
+    <button onclick="location.href='/required_skills'" class="top-btn" data-i18n="requiredSkillsPage">Required Skills</button>
+    <button onclick="location.href='/all_jobs'" class="top-btn" data-i18n="allJobPortal">All Job Portal</button>
+    <button onclick="location.href='/add_job'" class="top-btn" data-i18n="addJob">Add Job</button>
+</nav>
+
+<main class="card">
+    <h1 data-i18n="welcomeTitle">Welcome to Job Portal</h1>
+
+    <div>
+        <button type="button" onclick="setLanguage('en')" class="btn" data-lang-button="en" data-i18n="english">English</button>
+        <button type="button" onclick="setLanguage('te')" class="btn" data-lang-button="te" data-i18n="telugu">Telugu</button>
+        <button type="button" onclick="setLanguage('hi')" class="btn" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button type="button" onclick="startVoice()" class="btn" data-i18n="useVoiceCamera">Use Voice / Camera</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button type="button" onclick="location.href='/'" class="btn start" data-i18n="startUsingApp">Start Using App</button>
+        <button type="button" onclick="location.href='/required_skills'" class="btn" data-i18n="knowRequiredSkills">Know Required Skills</button>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>

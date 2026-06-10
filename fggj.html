@@ -1,0 +1,19 @@
+function goLogin() {
+    window.location.href = "/login";
+}
+
+function goRegister() {
+    window.location.href = "/register";
+}
+
+function goHome() {
+    let lang = localStorage.getItem('language') || 'en';
+
+    if(lang === "te") window.location.href = "/te";
+    else if(lang === "hi") window.location.href = "/hi";
+    else window.location.href = "/en";
+}
+
+function goAddJob() {
+    window.location.href = "/add_job";
+}

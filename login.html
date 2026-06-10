@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light d-flex justify-content-center align-items-center" style="min-height:100vh;">
+
+<section class="card p-4 shadow" style="width:min(100%, 370px);">
+    <div class="text-end mb-3">
+        <button type="button" onclick="setLanguage('en')" class="btn btn-sm btn-outline-primary" data-lang-button="en" data-i18n="english">English</button>
+        <button type="button" onclick="setLanguage('te')" class="btn btn-sm btn-outline-success" data-lang-button="te" data-i18n="telugu">Telugu</button>
+        <button type="button" onclick="setLanguage('hi')" class="btn btn-sm btn-outline-danger" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+    </div>
+
+    <h1 class="h3 text-center mb-3" data-i18n="login">Login</h1>
+
+    {% if error %}
+        <div class="alert alert-danger py-2">{{ error }}</div>
+    {% endif %}
+
+    <form action="/login" method="POST">
+        <div class="input-group mb-2">
+            <input type="text" name="username" id="username" class="form-control" placeholder="Username" data-i18n-placeholder="usernamePlaceholder" required>
+            <button type="button" onclick="startVoice('username')" class="btn btn-outline-secondary" data-i18n="mic">Mic</button>
+        </div>
+
+        <div class="input-group mb-2">
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password" data-i18n-placeholder="passwordPlaceholder" required>
+            <button type="button" onclick="startVoice('password')" class="btn btn-outline-secondary" data-i18n="mic">Mic</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" data-i18n="login">Login</button>
+        <button type="button" onclick="startVoice()" class="btn btn-dark w-100 mt-2" data-i18n="speak">Speak</button>
+        <p id="voice_status" class="small text-center text-muted mt-2 mb-0" data-i18n="voiceHelp">Click Speak and say your command.</p>
+    </form>
+</section>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>

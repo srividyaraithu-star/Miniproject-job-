@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body
+    data-result-state="{% if not searched %}search-first{% elif jobs|length == 0 %}not-found{% else %}found{% endif %}"
+    style="background: linear-gradient(to right, #74ebd5, #acb6e5); min-height: 100vh;">
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand text-warning fw-bold" href="/" data-i18n="appName">AI Job Finder</a>
+    <div class="d-flex gap-2">
+      <button type="button" onclick="setLanguage('en')" class="btn btn-outline-light" data-lang-button="en" data-i18n="english">English</button>
+      <button type="button" onclick="setLanguage('te')" class="btn btn-outline-light" data-lang-button="te" data-i18n="telugu">Telugu</button>
+      <button type="button" onclick="setLanguage('hi')" class="btn btn-outline-light" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+      <a href="/" class="btn btn-outline-light" data-i18n="search">Search</a>
+      <a href="/dashboard" class="btn btn-outline-light" data-i18n="dashboard">Dashboard</a>
+      <a href="/required_skills" class="btn btn-outline-light" data-i18n="requiredSkillsPage">Required Skills</a>
+      <a href="/add_job" class="btn btn-success" data-i18n="addJob">Add Job</a>
+      <a href="/logout" class="btn btn-danger" data-i18n="logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-5">
+    <section class="card shadow p-4">
+        <h1 class="h3 text-center text-success mb-4" data-i18n="recommendedJobs">Recommended Jobs</h1>
+
+        {% if not searched %}
+            <p class="text-center mb-0" data-i18n="enterSearch">Enter your skills and location to search for jobs.</p>
+        {% elif jobs|length == 0 %}
+            <h2 class="h5 text-danger text-center" data-i18n="noJobsFound">No jobs found</h2>
+            <p class="text-center mb-0" data-i18n="tryDifferent">Try different skills or a nearby location.</p>
+        {% else %}
+            <h2 id="jobsFoundTitle" class="h5 text-success text-center mb-3" data-skills="{{ skills }}" data-location="{{ location }}">Jobs found for {{ skills }} in {{ location }}</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th data-i18n="jobTitle">Job Title</th>
+                            <th data-i18n="requiredSkills">Skills Required</th>
+                            <th data-i18n="location">Location</th>
+                            <th data-i18n="matchScore">Match Score</th>
+                            <th data-i18n="matchDetails">Match Details</th>
+                            <th data-i18n="mobileNumber">Mobile Number</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr>
+                            <td data-translate-value>{{ job.title }}</td>
+                            <td data-translate-value>{{ job.skills }}</td>
+                            <td data-translate-value>{{ job.location }}</td>
+                            <td>
+                                <span class="badge bg-success">{{ job.match_score }}%</span>
+                            </td>
+                            <td>{{ job.match_message }}</td>
+                            <td>{{ job.mobile or "" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary" data-i18n="back">Back</a>
+            <a href="/required_skills" class="btn btn-outline-success" data-i18n="requiredSkillsPage">Required Skills</a>
+            <button type="button" onclick="startVoice()" class="btn btn-warning" data-i18n="speak">Speak</button>
+        </div>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>

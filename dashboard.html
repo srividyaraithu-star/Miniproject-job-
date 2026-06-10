@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="userDashboardTitle">User Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background: linear-gradient(to right, #eef2f3, #d7e1ec); min-height: 100vh;">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand text-warning fw-bold" href="/dashboard" data-i18n="appName">AI Job Finder</a>
+        <div class="d-flex gap-2 flex-wrap justify-content-end">
+            <button type="button" onclick="setLanguage('en')" class="btn btn-outline-light" data-lang-button="en" data-i18n="english">English</button>
+            <button type="button" onclick="setLanguage('te')" class="btn btn-outline-light" data-lang-button="te" data-i18n="telugu">Telugu</button>
+            <button type="button" onclick="setLanguage('hi')" class="btn btn-outline-light" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+            <a href="/" class="btn btn-outline-light" data-i18n="search">Search</a>
+            <a href="/required_skills" class="btn btn-outline-light" data-i18n="requiredSkillsPage">Required Skills</a>
+            <a href="/all_jobs" class="btn btn-outline-light" data-i18n="allJobs">All Jobs</a>
+            <a href="/add_job" class="btn btn-success" data-i18n="addJob">Add Job</a>
+            <a href="/logout" class="btn btn-danger" data-i18n="logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <section class="mb-4">
+        <h1 class="h3 mb-1"><span data-i18n="dashboardWelcomePrefix">Welcome,</span> <span data-translate-value>{{ user.username }}</span></h1>
+        <p class="text-muted mb-0" data-i18n="dashboardIntro">Here are your profile details and job recommendations.</p>
+        <div class="d-flex gap-2 flex-wrap align-items-center mt-3">
+            <a href="/required_skills" class="btn btn-outline-success btn-sm" data-i18n="knowSkillsForJob">Know skills needed for each job</a>
+            <button type="button" onclick="speakPageGuide()" class="btn btn-dark btn-sm" data-i18n="speak">Speak</button>
+        </div>
+        <p id="voice_status" class="small text-muted mt-2 mb-0" data-i18n="pageVoiceHelp">Click Speak to hear page guidance or say a command.</p>
+    </section>
+
+    <div class="row g-4">
+        <section class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5 text-success mb-3" data-i18n="yourProfile">Your Profile</h2>
+
+                    <p class="mb-2"><strong data-i18n="username">Username</strong>: <span data-translate-value>{{ user.username }}</span></p>
+                    <p class="mb-2"><strong data-i18n="location">Location</strong>: {% if user.location %}<span data-translate-value>{{ user.location }}</span>{% else %}<span data-i18n="notAdded">Not added</span>{% endif %}</p>
+                    <p class="mb-2"><strong data-i18n="education">Education</strong>: {% if user.education %}<span data-translate-value>{{ user.education }}</span>{% else %}<span data-i18n="notAdded">Not added</span>{% endif %}</p>
+                    <p class="mb-0"><strong data-i18n="skills">Skills</strong>: {% if user.skills %}<span data-translate-value>{{ user.skills }}</span>{% else %}<span data-i18n="notAdded">Not added</span>{% endif %}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+                        <h2 class="h5 text-success mb-0" data-i18n="recommendedJobs">Recommended Jobs</h2>
+                        <form action="/result" method="POST" class="d-flex gap-2 flex-wrap">
+                            <input type="hidden" name="skills" value="{{ user.skills or '' }}">
+                            <input type="hidden" name="location" value="{{ user.location or '' }}">
+                            <button type="submit" class="btn btn-primary btn-sm" data-i18n="viewMoreMatches">View More Matches</button>
+                        </form>
+                    </div>
+
+                    {% if recommended_jobs|length == 0 %}
+                        <div class="alert alert-warning mb-0" data-i18n="noMatchingJobs">
+                            No matching jobs found yet. Try adding more skills or checking all available jobs.
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th data-i18n="jobTitle">Job Title</th>
+                                        <th data-i18n="requiredSkills">Skills Required</th>
+                                        <th data-i18n="location">Location</th>
+                                        <th data-i18n="matchScore">Match Score</th>
+                                        <th data-i18n="matchDetails">Match Details</th>
+                                        <th data-i18n="mobileNumber">Mobile Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for job in recommended_jobs %}
+                                    <tr>
+                                        <td data-translate-value>{{ job.title }}</td>
+                                        <td data-translate-value>{{ job.skills }}</td>
+                                        <td data-translate-value>{{ job.location }}</td>
+                                        <td>
+                                            <span class="badge bg-success">{{ job.match_score }}%</span>
+                                        </td>
+                                        <td data-translate-value>{{ job.match_message }}</td>
+                                        <td>{{ job.mobile or "" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-success mb-3" data-i18n="quickSearch">Quick Search</h2>
+            <form action="/result" method="POST" class="row g-3">
+                <div class="col-md-5">
+                    <input id="skill_input" type="text" name="skills" class="form-control" placeholder="Enter skills" data-i18n-placeholder="enterSkills" data-translate-input-value value="{{ user.skills or '' }}">
+                </div>
+                <div class="col-md-5">
+                    <input id="location_input" type="text" name="location" class="form-control" placeholder="Enter location" data-i18n-placeholder="enterLocation" data-translate-input-value value="{{ user.location or '' }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100" data-i18n="search">Search</button>
+                </div>
+                <div class="col-12">
+                    <button type="button" onclick="startVoice()" class="btn btn-dark" data-i18n="speak">Speak</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>

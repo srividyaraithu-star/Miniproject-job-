@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Required Skills</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #f7fbf8, #e7f1ee);
+            min-height: 100vh;
+        }
+
+        .page-intro {
+            max-width: 760px;
+        }
+
+        .job-card {
+            border: 0;
+            border-radius: 8px;
+        }
+
+        .skill-badge {
+            display: inline-block;
+            margin: 3px 4px 3px 0;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #eef7f1;
+            color: #17613a;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand text-warning fw-bold" href="/" data-i18n="appName">AI Job Finder</a>
+        <div class="d-flex gap-2 flex-wrap justify-content-end">
+            <button type="button" onclick="setLanguage('en')" class="btn btn-outline-light" data-lang-button="en" data-i18n="english">English</button>
+            <button type="button" onclick="setLanguage('te')" class="btn btn-outline-light" data-lang-button="te" data-i18n="telugu">Telugu</button>
+            <button type="button" onclick="setLanguage('hi')" class="btn btn-outline-light" data-lang-button="hi" data-i18n="hindi">Hindi</button>
+            <a href="/" class="btn btn-outline-light" data-i18n="search">Search</a>
+            <a href="/dashboard" class="btn btn-outline-light" data-i18n="dashboard">Dashboard</a>
+            <a href="/all_jobs" class="btn btn-outline-light" data-i18n="allJobs">All Jobs</a>
+            <a href="/add_job" class="btn btn-success" data-i18n="addJob">Add Job</a>
+            <a href="/logout" class="btn btn-danger" data-i18n="logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <section class="page-intro mb-4">
+        <span class="badge bg-success mb-2" data-i18n="jobSkillGuide">Job Skill Guide</span>
+        <h1 class="h2 fw-bold mb-2" data-i18n="requiredSkillsTitle">Required Skills for Rural and Local Jobs</h1>
+        <p class="text-muted mb-0" data-i18n="requiredSkillsIntro">
+            Use this page to understand which skills are needed for each job. Users can compare their current skills and choose the best jobs to search or apply for.
+        </p>
+        <div class="d-flex gap-2 flex-wrap align-items-center mt-3">
+            <button type="button" onclick="speakPageGuide()" class="btn btn-dark btn-sm" data-i18n="speak">Speak</button>
+        </div>
+        <p id="voice_status" class="small text-muted mt-2 mb-0" data-i18n="pageVoiceHelp">Click Speak to hear page guidance or say a command.</p>
+    </section>
+
+    <section class="card job-card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+                <div>
+                    <h2 class="h4 text-success mb-1" data-i18n="unskilledJobs">Unskilled Jobs</h2>
+                    <p class="text-muted mb-0" data-i18n="unskilledJobsIntro">Jobs that need physical work, discipline, and basic practical knowledge.</p>
+                </div>
+                <span class="badge bg-secondary">{{ unskilled_jobs|length }} <span data-i18n="jobsCount">jobs</span></span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover bg-white mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 32%;" data-i18n="jobName">Job Name</th>
+                            <th data-i18n="requiredSkills">Required Skills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in unskilled_jobs %}
+                        <tr>
+                            <td class="fw-semibold" data-translate-value>{{ job.title }}</td>
+                            <td>
+                                {% for skill in job.skills.split(",") %}
+                                    <span class="skill-badge" data-translate-value>{{ skill.strip() }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="card job-card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+                <div>
+                    <h2 class="h4 text-success mb-1" data-i18n="skilledJobs">Skilled Jobs</h2>
+                    <p class="text-muted mb-0" data-i18n="skilledJobsIntro">Jobs that need specific technical, farming, repair, or craft skills.</p>
+                </div>
+                <span class="badge bg-secondary">{{ skilled_jobs|length }} <span data-i18n="jobsCount">jobs</span></span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover bg-white mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 32%;" data-i18n="jobName">Job Name</th>
+                            <th data-i18n="requiredSkills">Required Skills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in skilled_jobs %}
+                        <tr>
+                            <td class="fw-semibold" data-translate-value>{{ job.title }}</td>
+                            <td>
+                                {% for skill in job.skills.split(",") %}
+                                    <span class="skill-badge" data-translate-value>{{ skill.strip() }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="mt-4 d-flex gap-2 flex-wrap">
+        <a href="/" class="btn btn-primary" data-i18n="findJobs">Search Jobs</a>
+        <a href="/all_jobs" class="btn btn-outline-success" data-i18n="viewAllJobs">View All Jobs</a>
+        <a href="/welcome" class="btn btn-secondary" data-i18n="back">Back</a>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='i18n.js', v=16) }}"></script>
+<script src="{{ url_for('static', filename='voice.js', v=8) }}"></script>
+
+</body>
+</html>
